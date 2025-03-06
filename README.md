@@ -75,6 +75,7 @@ import express from "express";
 import { WebSocketServer } from "ws";
 import cors from "cors";
 import dotenv from "dotenv";
+import http from "http";
 
 dotenv.config();
 const app = express();
@@ -89,11 +90,10 @@ app.get("/", (req, res) => {
   res.send("Express + TypeScript Server is Running 🚀");
 });
 
-// Start WebSocket Server
-const server = app.listen(PORT, () => {
-  console.log(`⚡ Server is running on http://localhost:${PORT}`);
-});
+// Create HTTP Server
+const server = http.createServer(app);
 
+// Start WebSocket Server
 const wss = new WebSocketServer({ server });
 
 wss.on("connection", (ws) => {
@@ -107,6 +107,11 @@ wss.on("connection", (ws) => {
   });
 
   ws.on("close", () => console.log("WebSocket disconnected"));
+});
+
+// Start Server
+server.listen(PORT, () => {
+  console.log(`⚡ Server is running on http://localhost:${PORT}`);
 });
 ```
 
